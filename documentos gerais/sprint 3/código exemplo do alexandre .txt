@@ -1,0 +1,56 @@
+https://github.com/AlexandreDSptech/Projeto_Individual/blob/main/public/dashboard/graficos.html
+
+function oberDados() {
+            //busca os ultimos 7 dados
+            if(resposta.ok){
+
+                var dados = RespostaJson.dados
+                dados = []
+                const grafico = document.getElementById("myChart1")
+                grafico.data.datasets[0] = dados
+                grafico.update()
+            }
+        }
+
+        setInterval(() => {
+            // função para dar o .update()
+            oberDados()
+
+            //um dos dois
+            
+            const grafico = document.getElementById("myChart1")
+            grafico.update()
+
+        }, 1000);
+
+        
+        
+        const chart = new Chart('myChart1', {
+            type: 'line',
+            data: {
+                labels: [horario1, horario2, horario3, horario4, horario5, horario6],
+                datasets: [{
+                    label: 'Temperatura',
+                    data: [temperatura1, temperatura2, temperatura3, temperatura4, temperatura5, temperatura6],
+                    backgroundColor: 'rgba(255, 99, 132)',
+                    borderColor: 'rgba(255, 99, 132)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Umidade',
+                    data: [umidade1, umidade2, umidade3, umidade4, umidade5, umidade6],
+                    backgroundColor: 'rgba(54, 162, 235)',
+                    borderColor: 'rgba(54, 162, 235)',
+                    borderWidth: 1
+                }
+            ]
+            },
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
