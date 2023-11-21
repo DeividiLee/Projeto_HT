@@ -261,9 +261,71 @@
     setTimeout(() => {
         selectStatus.addEventListener("change", function () {
             var Choosen = selecetStatus.options[selecStatus.selectedIndex].value;
-            atualizarFeed(choosen)
+            listarStatus(choosen)
         })
     })
+    function listarStatus(area) {
+        fetch("/avisos/listar").then(function (resposta) {
+
+            if (resposta.ok) {
+                all.innerHTML = ""
+                
+
+                resposta.json().then(function (resposta) {
+                    console.log("Dados recebidos quadrado setor: ", JSON.stringify(resposta));
+
+                    selectStatus.innerHTML = ""
+
+                    var OptionStatus = document.createElement("option");
+                    OptionStatus.innerHTML = "status";
+                    OptionStatus.value = "0";
+                    selectStatus.appendChild(OptionStatus);
+
+                    for (let i = 0; i < resposta.length; i++) {
+
+                        var Status = resposta[i];
+                        //  nal inha 250 pegando o elemento que é select, quando desce pra 256 craindo um elememtno option, colocando setores 
+                        // e id que serve pra aparecer no, motivo pra ter feito assim, que é sim um dia eu precis ficar atualizando um option nesse select
+                        //  eu vou ter que limpar o select e se eu limprar o select e não criar o 0 eu me fudi
+                        // 
+                        var OptionStatus = document.createElement("option");
+                        OptionStatus.innerHTML = status.nome;
+                        OptionStatus.value = `${setor.idStatus}`
+                        selectStatus.appendChild(OptionStatus);
+
+
+                        var publicacao = resposta[i];
+                        if (area != 0 && publicacao.idStatus != area && area != undefined) {
+                            continue
+                        }
+                        // adicionar um event listener no seelct setor função de recursividade só que vai passar o parâmetro 
+                        // e a partir desse parametro
+                        all.innerHTML += ` 
+            <div class="cardPai" onclick="VerificarSetor(${publicacao.idSetor})">
+                <div class="cardFilho">
+                    <div class="cardTexto">
+                        <span class="txtUso" id="feed2" > Setor ${publicacao.idSetor}</span>
+                        <div class="div-img"><img src="assets/img/iconDashboard.png" alt="" class="imgCard"></div>
+                    </div>
+                    <span class="infoCard" >${publicacao.nome}</span>
+                </div>
+                <input type="hidden" id="valorSetor" value=${i + 1}>
+            </div>`
+                    }
+                    if (area == undefined) {
+                        area = 0
+                    }
+                    selectSetor.value = `setor-${area}`
+                    // finalizarAguardar();
+                });
+            } else {
+                throw ('Houve um erro na API!');
+            }
+        }).catch(function (resposta) {
+            console.error(resposta);
+            // finalizarAguardar();
+        });
+    }
     function atualizarFeed(area) {
         fetch("/avisos/listar").then(function (resposta) {
 
