@@ -13,64 +13,74 @@
 </head>
 <style>
     .setaPerfilCabecalho:hover {
-    cursor: pointer;
-}
-.menuPerfil ul {
-    padding: 0;
-}
-.btnSair {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    width: 35px;
-    height: 35px;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition-duration: .3s;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
-    background-color: rgb(255, 65, 65);
-}
-.btnSair:hover {
-    width: 90px;
-    border-radius: 40px;
-    transition-duration: .3s;
-}
-.btnSair:hover .sign {
-    width: 45%;
-    transition-duration: .3s;
-}
-.btnSair:hover .txtBtn {
-    opacity: 1;
-    width: 70%;
-    transition-duration: .3s;
-}
-.sign {
-    width: 100%;
-    transition-duration: .3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.sign svg {
-    width: 17px;
-}
-.sign svg path {
-    fill: white;
-}
-.txtBtn {
-    position: absolute;
-    right: 0%;
-    width: 0%;
-    opacity: 0;
-    color: white;
-    font-size: 1em;
-    font-weight: 600;
-    transition-duration: .3s;
-}
+        cursor: pointer;
+    }
+
+    .menuPerfil ul {
+        padding: 0;
+    }
+
+    .btnSair {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        width: 35px;
+        height: 35px;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition-duration: .3s;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+        background-color: rgb(255, 65, 65);
+    }
+
+    .btnSair:hover {
+        width: 90px;
+        border-radius: 40px;
+        transition-duration: .3s;
+    }
+
+    .btnSair:hover .sign {
+        width: 45%;
+        transition-duration: .3s;
+    }
+
+    .btnSair:hover .txtBtn {
+        opacity: 1;
+        width: 70%;
+        transition-duration: .3s;
+    }
+
+    .sign {
+        width: 100%;
+        transition-duration: .3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .sign svg {
+        width: 17px;
+    }
+
+    .sign svg path {
+        fill: white;
+    }
+
+    .txtBtn {
+        position: absolute;
+        right: 0%;
+        width: 0%;
+        opacity: 0;
+        color: white;
+        font-size: 1em;
+        font-weight: 600;
+        transition-duration: .3s;
+    }
 </style>
+
 <body>
 
     <div class="divPai">
@@ -185,8 +195,9 @@
                             <p id="tituloPerfil">Anthony Bento</p>
                             <p id="cargoPerfil">CEO</p>
                         </div>
-                        <img class="setaPerfilCabecalho" src="assets/img/setaIcon.png" onclick="exibirMenuPerfil()" >
-                        <div id="menuPerfil" class="menuPerfil" style="display: none; position: absolute; z-index: 1; top: 58px;">
+                        <img class="setaPerfilCabecalho" src="assets/img/setaIcon.png" onclick="exibirMenuPerfil()">
+                        <div id="menuPerfil" class="menuPerfil"
+                            style="display: none; position: absolute; z-index: 1; top: 58px;">
                             <ul>
                                 <button class="btnSair">
                                     <div class="sign"><svg viewBox="0 0 512 512">
@@ -207,14 +218,72 @@
 
             <!-- começo conteudo pagina -->
             <div class="divPaiConteudo">
-                
+                <div>
+                    <div id="main">
+                        <div id="cabeçalho">
+                            <img src="" alt="">
+                            <p>Tenha mais controle sobre o desempenho de suas máquinas acompanhando seu histórico de
+                                alertas e medição</p>
+                        </div>
+                        <div id="grafico">
+                        </div>
+                    </div>
+                </div>
+                <button id="print"></button>
+                <button id="home"></button>
             </div>
-
-
-            </div>
-            <!-- fim conteudo pagina -->
-
         </div>
+        <!-- fim conteudo pagina -->
+
+    </div>
     </div>
 </body>
+
 </html>
+<script>
+    function listarUltimosDados() {
+        fetch("/avisos/listarTodosComputadores").then(function (resposta) {
+
+            if (resposta.ok) {
+
+                console.log("ENTREII")
+                const ctx = document.getElementById('grafico');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['12:00', '13:00', '14:00', '15:00', '16:00', '17:00'],
+                        datasets: [{
+                            label: 'Processador',
+                            data: [30, 29, 28, 25, 22, 23],
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Memória Ram',
+                            data: [80, 82, 80, 85, 80, 83],
+                            borderWidth: 1
+                        }]
+
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+
+                resposta.json().then(function (resposta) {
+                    console.log("Dados recebidos da tabela Avisos ", JSON.stringify(resposta));
+                    for (i = 0; i < resposta.length; i++) {
+                        resposta = resposta[i]
+                    }
+                });
+            } else {
+                throw ('Houve um erro na API!');
+            }
+        })
+    }
+
+
+</script>
