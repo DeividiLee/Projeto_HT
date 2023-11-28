@@ -1,0 +1,43 @@
+.divPaiConteudo{
+    background-color:aliceblue;
+    display:flex;
+    justify-content: center;
+
+
+}
+#conteudo{
+    display:flex;
+    background: #FFF;
+    margin: 2%;
+    width: 80vw;
+    padding: 2%;
+    
+}
+#cabecalho{
+    border-bottom-style:solid;
+    border-bottom-color:#C4CBD2;
+    width:166.5%;
+    position:relative;
+    right:3.5%
+}
+#descricao{
+    display:flex;
+    width:110%;
+    
+
+    /* justify-content: center; */
+}
+#descricao p {
+    display:flex;
+    align-items: center;
+}
+#descricao img{
+    height:6vh;
+    width:6vh;
+    margin-right:2%;
+    margin-left:2%;
+}
+#main {
+     
+
+}

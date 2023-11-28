@@ -218,19 +218,20 @@
 
             <!-- começo conteudo pagina -->
             <div class="divPaiConteudo">
-                <div>
+                <div id="conteudo">
                     <div id="main">
-                        <div id="cabeçalho">
-                            <img src="" alt="">
-                            <p>Tenha mais controle sobre o desempenho de suas máquinas acompanhando seu histórico de
-                                alertas e medição</p>
+                        <div id="cabecalho">
+                            <div id="descricao">
+                                <img src="assets/img/lupa.png" alt="">
+
+                                <p>Tenha mais controle sobre o desempenho de suas máquinas acompanhando seu histórico de
+                                    alertas e medição</p>
+                            </div>
                         </div>
                         <div id="grafico">
                         </div>
                     </div>
                 </div>
-                <button id="print"></button>
-                <button id="home"></button>
             </div>
         </div>
         <!-- fim conteudo pagina -->
@@ -241,48 +242,98 @@
 
 </html>
 <script>
-    function listarUltimosDados() {
-        fetch("/avisos/listarTodosComputadores").then(function (resposta) {
 
-            if (resposta.ok) {
 
-                console.log("ENTREII")
-                const ctx = document.getElementById('grafico');
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: ['12:00', '13:00', '14:00', '15:00', '16:00', '17:00'],
-                        datasets: [{
-                            label: 'Processador',
-                            data: [30, 29, 28, 25, 22, 23],
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Memória Ram',
-                            data: [80, 82, 80, 85, 80, 83],
-                            borderWidth: 1
-                        }]
-
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-
-                resposta.json().then(function (resposta) {
-                    console.log("Dados recebidos da tabela Avisos ", JSON.stringify(resposta));
-                    for (i = 0; i < resposta.length; i++) {
-                        resposta = resposta[i]
-                    }
-                });
-            } else {
-                throw ('Houve um erro na API!');
+    const chart = new Chart('grafico', {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'CPU',
+                data: [],
+                backgroundColor: 'rgba(7, 92, 171, 1)',
+                borderColor: 'rgba(7, 92, 171, 1)',
+                borderWidth: 1
             }
-        })
+            ]
+            [{
+                label: 'RAM',
+                data: [],
+                backgroundColor: 'rgba(7, 92, 171, 1)',
+                borderColor: 'rgba(7, 92, 171, 1)',
+                borderWidth: 1
+            }
+            ]
+        }
+    });
+    // uma função que chama 12 vezes, e muda o tempo 
+    // um grafico com 2 datasets, na X colocar o tempo de  12meesse(ajenri, fev, mar, abril,), Y eu quero a quantidade em cada mês 
+    async function listarAvisosCPU() {
+        var idComputador = sessionStorage.ID_MAQUINA;
+        try {
+            var resposta = await fetch("/aviso/listarAvisosCPU", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    idComputadorServer: idComputador
+                })
+            });
+            if (resposta.ok) {
+                var respostaJson = await resposta.json();
+                console.log('JSON CPU: ', respostaJson);
+            }
+        } catch (erro) {
+            console.log("Erro: ", erro);
+        }
+    }
+    async function listarAvisosRAM() {
+        var idComputador = sessionStorage.ID_MAQUINA;
+        try {
+            var resposta = await fetch("/aviso/listarAvisosRAM", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    idComputadorServer: idComputador
+                })
+            });
+            if (resposta.ok) {
+                var respostaJson = await resposta.json();
+                console.log('JSON RAM: ', respostaJson);
+            }
+        } catch (erro) {
+            console.log("Erro: ", erro);
+        }
+    }
+    function trocar() {
+        window.location = "setores.html"
+    }
+
+    var nome = sessionStorage.NOME_COLABORADOR;
+    tituloPerfil.innerHTML = nome;
+
+    var cargo = sessionStorage.NIVELACESSO_COLABORADOR;
+    if (cargo == "RL") {
+        cargo = "Representante"
+    } else if (cargo == "GT") {
+        cargo = "Gerente TI"
+    }
+
+
+
+    var Empresa = sessionStorage.NOME_FANTASIA_COLABORADOR;
+    nomeEmpresa.innerHTML = Empresa;
+
+    function exibirMenuPerfil() {
+        var menu = document.getElementById('menuPerfil')
+        if (menu.style.display === 'block') {
+            menu.style.display = 'none'
+        } else {
+            menu.style.display = 'block'
+        }
     }
 
 

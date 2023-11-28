@@ -3,6 +3,13 @@ var router = express.Router();
 
 var avisoController = require("../controllers/avisoController");
 
+router.get("/listarAvisosCPU", function (req, res) {
+    avisoController.listarAvisosCPU(req, res);
+});
+router.get("/listarAvisosRAM", function (req, res) {
+    avisoController.listarAvisosRAM(req, res);
+});
+
 router.get("/listar", function (req, res) {
     avisoController.listar(req, res);
 });
